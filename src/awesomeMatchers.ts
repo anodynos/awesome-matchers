@@ -137,7 +137,6 @@ const are = (name, shouldMatch = true) => {
 //   };
 // };
 
-
 // @todo: refactor all those
 export const is = (actual, expected) => {
   if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
@@ -172,8 +171,10 @@ export const ok = a => Expect(a).toBeTruthy();
 export const notOk = a => Expect(a).not.toBeTruthy();
 export const tru = a => Expect(a).toBe(true);
 export const fals = a => Expect(a).toBe(false);
+
 // export const equalSet = createEqualSet(true);
 // export const notEqualSet = createEqualSet(false);
+
 export const isEqual = are('isEqual');
 export const isntEqual = are('isEqual', false);
 export const isExact = are('isExact');
