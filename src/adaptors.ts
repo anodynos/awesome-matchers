@@ -7,22 +7,27 @@ import { expect } from 'chai';
 const chaiLog = new _B.Logger('Log');
 
 export const chaiAdaptor: IMatchAdaptor = (mr: IMatchResult) => {
-  chaiLog.warn(
-    mr.title + '  (chaiAdaptor) \n',
-    mr.explain,
-    ' \n ### VALUES ### ',
-    ` \n ${mr.leftName} = `, // @todo: add \n if they not scalar
-    mr.leftValue,
-    ` \n ${mr.rightName} = `, // @todo: add \n if they not scalar`
-    mr.rightValue,
-    
-    // @todo: configure those
-    // ' \n actual = \n',
-    // mr.actual,
-    // ' \n expected = \n',
-    // mr.expected
-  );
-  
+  const messages = [mr.title + '  (chaiAdaptor) \n', mr.explain];
+
+  if (mr.useValues) {
+    messages.push(
+      ...[
+        ' \n ### VALUES ### ',
+        ` \n ${mr.leftName} = `, // @todo: add \n if they not scalar
+        mr.leftValue,
+        ` \n ${mr.rightName} = `, // @todo: add \n if they not scalar`
+        mr.rightValue,
+      ],
+    );
+  }
+
+  // @todo: configure those
+  // ' \n actual = \n',
+  // mr.actual,
+  // ' \n expected = \n',
+  // mr.expected
+
+  chaiLog.warn(...messages);
   expect(mr.isMatch).to.be[mr.shouldMatch + '']; // @todo: fix to integrate with chai properly
 };
 

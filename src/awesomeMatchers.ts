@@ -6,6 +6,7 @@ const l = new _B.Logger('Log');
 // @todo: extract expects & framework specifics
 import { Expect, MatchError } from 'alsatian';
 import { expect } from 'chai';
+import isArraySetEqual from './utils/isArraySetEqual';
 
 export interface IAwesomeMatchersConfig {
   matchAdaptor: IMatchAdaptor | null; // initially null, but must be configured
@@ -103,39 +104,44 @@ const are = (name, shouldMatch = true) => {
   };
 };
 
-// const createEqualSet = asEqual => {
-//   return (result, expected) => {
-//     const isEq = _B.isEqualArraySet(result, expected);
-//
-//     if (asEqual) {
-//       if (!isEq) {
-//         l.warn(
-//           '\\n _B.isEqualArraySet expected \`true\`',
-//           '\\n result \\\\ expected \\n', _.difference(result, expected),
-//           '\\n expected \\\\ result \\n', _.difference(expected, result)
-//         );
-//       }
-//
-//       // report
-//       switch (cfg.testRuntime) {
-//         case 'alsatian': {
-//           Expect(isEq).toBe(true);
-//           return
-//         }
-//         case 'chai': {
-//           Expect(isEq).toBe(true);
-//           return
-//         }
-//       }
-//     }
-//
-//     if (isEq) {
-//       l.warn('\n _B.isEqualArraySet expected `false`, got `true`');
-//     }
-//
-//     Expect(isEq).toBe(false);
-//   };
-// };
+const createEqualSet = (shouldMatch = true) => {
+  return (actual, expected, comparator1?, comparator2?) => {
+    if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+  
+    if (!comparator1) comparator1 = (a, b) => a === b;
+    if (!comparator2) comparator2 = _.flip(comparator1);
+    
+    const isMatch = isArraySetEqual(actual, expected, comparator1, comparator2);
+    const mr = {
+      isPassed: false,
+      shouldMatch,
+      isMatch,
+      leftName: '\n actual \\ expected ',
+      rightName: '\n expected \\ actual ',
+    };
+
+    if (shouldMatch) {
+      if (!isMatch) {
+        cfg.matchAdaptor({
+          ...mr,
+          title: `Match Error: Wrong isArraySetEqual equivalence`,
+          explain: `It should | ACTUAL isArraySetEqual EXPECTED | but they are not.`,
+          useValues: true,
+          leftValue: _.differenceWith(actual, expected, comparator1),
+          rightValue: _.differenceWith(expected, actual, comparator2),
+        });
+      }
+    } else if (isMatch) {
+      // they NOT shouldMatch (~ but they did!)
+      cfg.matchAdaptor({
+        ...mr,
+        title: `Match Error: Wrong NOT isArraySetEqual equivalence`,
+        explain: `It should | NOT ACTUAL isArraySetEqual EXPECTED | but they are isArraySetEqual equivalent.`,
+        useValues: false
+      });
+    }
+  };
+};
 
 // @todo: refactor all those
 export const is = (actual, expected) => {
@@ -172,8 +178,8 @@ export const notOk = a => Expect(a).not.toBeTruthy();
 export const tru = a => Expect(a).toBe(true);
 export const fals = a => Expect(a).toBe(false);
 
-// export const equalSet = createEqualSet(true);
-// export const notEqualSet = createEqualSet(false);
+export const equalSet = createEqualSet();
+export const notEqualSet = createEqualSet(false);
 
 export const isEqual = are('isEqual');
 export const isntEqual = are('isEqual', false);
