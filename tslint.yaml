@@ -1,0 +1,12 @@
+extends:
+  - 'tslint-config-airbnb'
+  - 'tslint-config-prettier'
+rules:
+  no-increment-decrement: false
+  ter-indent: false
+  ter-arrow-parens: false
+  space-before-function-paren: false
+  variable-name: false
+  import-name: false
+  no-parameter-reassignment: false
+  one-variable-per-declaration: false

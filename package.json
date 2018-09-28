@@ -1,0 +1,63 @@
+{
+  "name": "awesome-matchers",
+  "version": "0.0.1",
+  "scripts": {
+    "clean": "rimraf dist",
+    "eslint": "eslint --fix \"src/**/*.js\"",
+    "tslint": "tslint --fix -p .",
+    "prettier": "prettier --write \"**/*.{ts,js,json}\"",
+    "format": "npm-run-all prettier tslint eslint prettier",
+    "start": "mkdir -p dist && npm-run-all --parallel compile:watch test:watch",
+    "compile:watch": "tsc -w",
+    "compile": "tsc",
+    "test": "NODE_ENV=test alsatian \"./dist/**/*.spec.js\" -t 10000 --tap | tap-spec",
+    "test-coverage": "nyc --reporter=lcov --reporter=html npm test && nyc report",
+    "test:watch": "nodemon --config nodemon.json --exec npm run test",
+    "test-ci:unit":
+      "NODE_ENV=test alsatian \"./dist/test/**/*.spec.js\" --tap | tap-xunit-alsatian > result/test_result.xml",
+    "test-ci":
+      "mkdir -p result && sleep 5 && nyc --reporter=clover --report-dir=result/coverage npm run test-ci:unit ",
+    "build": "mkdir -p dist && npm run compile",
+    "precommit": "lint-staged",
+    "postcommit": "git update-index -g",
+    "release": "standard-version"
+  },
+  "nyc": {
+    "include": ["dist/src"],
+    "extension": [".ts"]
+  },
+  "lint-staged": {
+    "*.js": ["eslint --fix", "prettier --write", "git add"],
+    "*.ts": ["tslint --fix", "prettier --write", "git add"]
+  },
+  "devDependencies": {
+    "@types/bluebird": "3.5.21",
+    "@types/lodash": "^4.14.116",
+    "@types/node": "^9.6.32",
+    "alsatian": "^2.3.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.11.0",
+    "husky": "^1.0.1",
+    "lint-staged": "^7.3.0",
+    "nodemon": "^1.12.1",
+    "npm-run-all": "^4.1.2",
+    "nyc": "^11.4.1",
+    "prettier": "^1.12.1",
+    "rimraf": "^2.6.2",
+    "standard-version": "^4.3.0",
+    "tap-spec": "^4.1.1",
+    "tap-xunit-alsatian": "^1.7.6",
+    "ts-mockito": "^2.0.0",
+    "ts-node": "^6.2.0",
+    "tslint": "^5.10.0",
+    "tslint-config-airbnb": "^5.8.0",
+    "tslint-config-prettier": "^1.12.0",
+    "typescript": "~2.9.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "uberscore": "0.0.19"
+  }
+}
