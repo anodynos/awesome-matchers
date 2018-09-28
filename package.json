@@ -53,7 +53,6 @@
     "@types/mocha": "^5.2.5",
     "@types/node": "^9.6.32",
     "alsatian": "^2.3.0",
-    "chai": "^4.2.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
@@ -78,6 +77,11 @@
   },
   "dependencies": {
     "lodash": "^4.17.11",
-    "uberscore": "0.0.19"
+    "uberscore": "0.0.19",
+    "chai": "^4.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
   }
 }
