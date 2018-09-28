@@ -38,7 +38,7 @@ const are = (name, shouldMatch = true) => {
       if (!isMatching) {
         const explain = [
           `Match Error: Wrong Difference:\n`,
-          `It should ACTUAL ${name} EXPECTED but they are NOT.\n`,
+          `It should | ACTUAL ${name} EXPECTED | but they are NOT.\n`,
           `At path: '${path.join('.')}'`,
           ' \n ### VALUES ### ',
           ' \n left value = ', // @todo: add \n if they not scalar
@@ -74,7 +74,7 @@ const are = (name, shouldMatch = true) => {
       if (isMatching) {
         const explain = [
           `Match Error: Wrong similarity:\n` +
-            `It should NOT ACTUAL ${name} EXPECTED but they are.`,
+            `It should | NOT ACTUAL ${name} EXPECTED | but they are.`,
         ];
 
         switch (cfg.testRuntime) {

@@ -1,10 +1,10 @@
+import * as _ from 'lodash';
+import * as _B from 'uberscore';
 import {
   AsyncSetup,
   AsyncTeardown,
   AsyncTest,
   Expect,
-  FocusTest,
-  FocusTest,
   FocusTests,
   IgnoreTest,
   IgnoreTests,
@@ -14,8 +14,6 @@ import {
 } from 'alsatian';
 import { isEqual, isLike, isntLike, isntEqual, iamLike, iamNotLike } from '../awesomeMatchers';
 import { john, john2, johnLike, maria } from '../fixtures/_fixtures';
-import * as _ from 'lodash';
-import * as _B from 'uberscore';
 
 @TestFixture()
 @FocusTests
