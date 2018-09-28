@@ -156,18 +156,18 @@ export const tru = a => Expect(a).toBe(true);
 export const fals = a => Expect(a).toBe(false);
 // export const equalSet = createEqualSet(true);
 // export const notEqualSet = createEqualSet(false);
-export const equals = are('isEqual');
-export const notEquals = are('isEqual', false);
-export const exact = are('isExact');
-export const notExact = are('isExact', false);
-export const iqual = are('isIqual');
-export const notIqual = are('isIqual', false);
-export const ixact = are('isIxact');
-export const notIxact = are('isIxact', false);
+export const isEqual = are('isEqual');
+export const isntEqual = are('isEqual', false);
+export const isExact = are('isExact');
+export const isntExact = are('isExact', false);
+export const isIqual = are('isIqual');
+export const isntIqual = are('isIqual', false);
+export const isIxact = are('isIxact');
+export const isntIxact = are('isIxact', false);
 export const isLike = are('isLike');
-export const isNotLike = are('isLike', false);
+export const isntLike = are('isLike', false);
 export const iamLike = _.flip(isLike);
-export const iamNotLike = _.flip(isNotLike);
+export const iamNotLike = _.flip(isntLike);
 
 // exp
 export const last = (items: any[], item) => {

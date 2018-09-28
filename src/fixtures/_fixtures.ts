@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 
 export const john = {
   address: {
+    country: 'United Kingdom',
     city: 'London',
     street: {
       name: 'Long Acre',
@@ -12,8 +13,12 @@ export const john = {
 };
 
 export const john2 = _.cloneDeep(john);
+
+export const johnLike = _.cloneDeep(_.pick(john, ['address']));
+
 export const maria =  {
   address: {
+    country: 'United Kingdom',
     city: 'London',
     street: {
       name: 'Long Acre',

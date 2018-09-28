@@ -6,31 +6,46 @@ import {
   IgnoreTest, IgnoreTests, Setup, Test,
   TestFixture,
 } from 'alsatian';
-import { equals, notEquals } from '../awesomeMatchers';
+import { isEqual, isntEqual } from '../awesomeMatchers';
 import { john, john2, maria } from '../fixtures/_fixtures';
 import * as _ from 'lodash';
 import * as _B from 'uberscore';
 
 @TestFixture()
-// @FocusTests
+@FocusTests
 // @IgnoreTests()
 export class EqualsAlsatianShowSpec {
   
   @Test()
-  itEquals_ItNotEquals_shouldPass() {
-    equals(john2, john, );
-    notEquals(maria, john, );
+  expectIsEqual_ItIsntEqual_shouldPass() {
+    Expect(john2).toEqual(john);
+    Expect(maria).not.toEqual(john);
+  }
+  
+  @Test()
+  itIsEqual_ItIsntEqual_shouldPass() {
+    isEqual(john2, john, );
+    isntEqual(maria, john, );
   }
 
   @Test()
-  itEquals_shouldFail() {
-    equals(maria, john, );
+  expectIsEqual_shouldFail() {
+    Expect(maria).toEqual(john);
   }
 
   @Test()
-  // @FocusTest
-  itNotEquals_shouldFail() {
-    notEquals( john2, john);
+  itIsEqual_shouldFail() {
+    isEqual(maria, john, );
+  }
+
+  @Test()
+  expectIsntEqual_shouldFail() {
+    Expect( john2).not.toEqual(john);
+  }
+  
+  @Test()
+  itIsntEqual_shouldFail() {
+    isntEqual( john2, john);
     // @todo: get rid of
     // data:
     //  got: undefined

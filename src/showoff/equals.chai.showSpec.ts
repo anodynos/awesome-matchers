@@ -1,18 +1,39 @@
-import { awesomeMatchersConfig, is, isnt } from '../awesomeMatchers';
-import { equals, notEquals } from '../awesomeMatchers';
+import { expect } from 'chai';
+import { awesomeMatchersConfig, isEqual, isntEqual } from '../awesomeMatchers';
 import { john, john2, maria } from '../fixtures/_fixtures';
 
 awesomeMatchersConfig.testRuntime = 'chai';
 
-describe("EqualsChaiShowSpec", () => {
-  it("itEquals_ItNotEquals_shouldPass", () => {
-    equals(john2, john, );
-    notEquals(maria, john, );
+describe('EqualsChaiShowSpec', () => {
+  describe('isEquals_isntEqual_shouldPass', () => {
+    it('chai.expect', () => {
+      expect(john2).to.be.deep.equal(john);
+      expect(maria).to.not.be.deep.equal(john);
+    });
+
+    it('awesomeMatchers', () => {
+      isEqual(john2, john);
+      isntEqual(maria, john);
+    });
   });
-  it("itEquals_shouldFail", () => {
-    equals(maria, john, );
+
+  describe('isEqual_shouldFail', () => {
+    it('chai.expect', () => {
+      expect(maria).to.be.deep.equal(john);
+    });
+
+    it('awesomeMatchers', () => {
+      isEqual(maria, john);
+    });
   });
-  it("itNotEquals_shouldFail", () => {
-    notEquals( john2, john);
+
+  describe('isntEqual_shouldFail', () => {
+    it('chai.expect', () => {
+      expect(john2).to.not.be.deep.equal(john);
+    });
+
+    it('awesomeMatchers', () => {
+      isntEqual(john2, john);
+    });
   });
 });
