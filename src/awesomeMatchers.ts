@@ -70,8 +70,8 @@ const are = (name, shouldMatch = true) => {
       isPassed: false,
       shouldMatch,
       isMatch,
-      leftName: 'left value',
-      rightName: 'right value',
+      leftName: 'got',
+      rightName: 'expected',
     };
 
     if (shouldMatch) {
@@ -93,11 +93,11 @@ const are = (name, shouldMatch = true) => {
       // they NOT shouldMatch (~ but they did!)
       cfg.matchAdaptor({
         ...mr,
-        title: `Match Error: Wrong ${name} similarity`,
+        title: `Match Error: Wrong NOT ${name} similarity`,
         explain: `It should | NOT ACTUAL ${name} EXPECTED | but they are.`,
         useValues: true,
         leftValue: actual,
-        rightValue: expected,
+        rightValue: `a value that's NOT ${name}`,
       });
     }
   };

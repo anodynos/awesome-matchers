@@ -7,7 +7,7 @@ import { chaiAdaptor } from '../adaptors';
 
 awesomeMatchersConfig.matchAdaptor = chaiAdaptor;
 
-describe.only('EqualsChaiShowSpec', () => {
+describe('EqualsChaiShowSpec', () => {
   describe('isLike_isntLike_shouldPass', () => {
     it('chai.expect', () => {
       expect(_B.isLike(johnLike, john)).to.be.true;
@@ -31,7 +31,7 @@ describe.only('EqualsChaiShowSpec', () => {
     });
   });
 
-  describe.only('isntLike_shouldFail', () => {
+  describe('isntLike_shouldFail', () => {
     it('chai.expect', () => {
       expect(_B.isLike(johnLike, john)).to.be.false;
     });

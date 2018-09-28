@@ -8,12 +8,12 @@ const chaiLog = new _B.Logger('Log');
 
 export const chaiAdaptor: IMatchAdaptor = (mr: IMatchResult) => {
   chaiLog.warn(
-    mr.title + '(chaiAdaptor)',
+    mr.title + '  (chaiAdaptor) \n',
     mr.explain,
     ' \n ### VALUES ### ',
     ` \n ${mr.leftName} = `, // @todo: add \n if they not scalar
     mr.leftValue,
-    ` \n ${mr.rightValue} = `, // @todo: add \n if they not scalar`
+    ` \n ${mr.rightName} = `, // @todo: add \n if they not scalar`
     mr.rightValue,
     
     // @todo: configure those
@@ -29,7 +29,7 @@ export const chaiAdaptor: IMatchAdaptor = (mr: IMatchResult) => {
 chaiAdaptor['testRuntime'] = 'chai';
 
 export const alsatianAdaptor: IMatchAdaptor = (mr: IMatchResult) => {
-  const descr = `${mr.title} (alsatianAdaptor) \n ${mr.explain}`;
+  const descr = `${mr.title}   (alsatianAdaptor) \n ${mr.explain}`;
 
   if (mr.useValues) {
     throw new MatchError(descr, mr.rightValue, mr.leftValue);
