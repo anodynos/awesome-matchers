@@ -13,34 +13,46 @@
     "test": "NODE_ENV=test alsatian \"./dist/**/*.spec.js\" -t 10000 --tap | tap-spec",
     "test-coverage": "nyc --reporter=lcov --reporter=html npm test && nyc report",
     "test:watch": "nodemon --config nodemon.json --exec npm run test",
-    "test-ci:unit":
-      "NODE_ENV=test alsatian \"./dist/test/**/*.spec.js\" --tap | tap-xunit-alsatian > result/test_result.xml",
-    "test-ci":
-      "mkdir -p result && sleep 5 && nyc --reporter=clover --report-dir=result/coverage npm run test-ci:unit ",
+    "test-ci:unit": "NODE_ENV=test alsatian \"./dist/test/**/*.spec.js\" --tap | tap-xunit-alsatian > result/test_result.xml",
+    "test-ci": "mkdir -p result && sleep 5 && nyc --reporter=clover --report-dir=result/coverage npm run test-ci:unit ",
     "build": "mkdir -p dist && npm run compile",
     "precommit": "lint-staged",
     "postcommit": "git update-index -g",
     "release": "standard-version"
   },
   "nyc": {
-    "include": ["dist/src"],
-    "extension": [".ts"]
+    "include": [
+      "dist/src"
+    ],
+    "extension": [
+      ".ts"
+    ]
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "prettier --write", "git add"],
-    "*.ts": ["tslint --fix", "prettier --write", "git add"]
+    "*.js": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.ts": [
+      "tslint --fix",
+      "prettier --write",
+      "git add"
+    ]
   },
   "devDependencies": {
     "@types/bluebird": "3.5.21",
     "@types/lodash": "^4.14.116",
     "@types/node": "^9.6.32",
     "alsatian": "^2.3.0",
+    "chai": "^4.2.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.11.0",
     "husky": "^1.0.1",
     "lint-staged": "^7.3.0",
+    "mocha": "^5.2.0",
     "nodemon": "^1.12.1",
     "npm-run-all": "^4.1.2",
     "nyc": "^11.4.1",
