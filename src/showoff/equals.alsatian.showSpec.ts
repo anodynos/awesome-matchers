@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 import * as _B from 'uberscore';
 
 @TestFixture()
-@FocusTests
+// @FocusTests
 // @IgnoreTests()
 export class EqualsAlsatianShowSpec {
   
