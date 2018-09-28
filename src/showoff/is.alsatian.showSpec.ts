@@ -1,17 +1,19 @@
-import { Expect, Test, TestFixture } from 'alsatian';
+import { Expect, FocusTest, FocusTests, Test, TestFixture } from 'alsatian';
 import { awesomeMatchersConfig, is, isnt } from '../awesomeMatchers';
 import { theAnswerToLife } from '../fixtures/_fixtures';
+import { alsatianAdaptor } from '../adaptors';
 
-awesomeMatchersConfig.testRuntime = 'alsatian';
+awesomeMatchersConfig.matchAdaptor = alsatianAdaptor;
 
 @TestFixture()
+// @FocusTests
 export class IsAlsatianShowSpec {
   //@todo: make `is` & `isnt` aliases to toBe & not.toBe
 
   @Test()
   expectIs_itIsnt_shouldPass() {
-    Expect(theAnswerToLife).toBe(42);
-    Expect(theAnswerToLife).not.toBe(84);
+    Expect(42).toBe(theAnswerToLife);
+    Expect(84).not.toBe(theAnswerToLife);
   }
 
   @Test()
@@ -22,17 +24,18 @@ export class IsAlsatianShowSpec {
 
   @Test()
   expectIs_shouldFail() {
-    Expect(theAnswerToLife).toBe(84);
+    Expect(84).toBe(theAnswerToLife);
   }
 
   @Test()
+  // @FocusTest
   itIs_shouldFail() {
     is(84, theAnswerToLife);
   }
 
   @Test()
   expectIsnt_shouldFail() {
-    Expect(theAnswerToLife).not.toBe(42);
+    Expect(42).not.toBe(theAnswerToLife);
   }
 
   @Test()

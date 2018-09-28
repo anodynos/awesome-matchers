@@ -1,8 +1,9 @@
 import { expect } from 'chai';
 import { awesomeMatchersConfig, isEqual, isntEqual } from '../awesomeMatchers';
 import { john, john2, maria } from '../fixtures/_fixtures';
+import { chaiAdaptor } from '../adaptors';
 
-awesomeMatchersConfig.testRuntime = 'chai';
+awesomeMatchersConfig.matchAdaptor = chaiAdaptor;
 
 describe('EqualsChaiShowSpec', () => {
   describe('isEquals_isntEqual_shouldPass', () => {

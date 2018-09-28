@@ -3,8 +3,9 @@ import * as _B from 'uberscore';
 
 import { awesomeMatchersConfig, isLike, isntLike } from '../awesomeMatchers';
 import { john, john2, johnLike, maria } from '../fixtures/_fixtures';
+import { chaiAdaptor } from '../adaptors';
 
-awesomeMatchersConfig.testRuntime = 'chai';
+awesomeMatchersConfig.matchAdaptor = chaiAdaptor;
 
 describe.only('EqualsChaiShowSpec', () => {
   describe('isLike_isntLike_shouldPass', () => {

@@ -7,17 +7,47 @@ const l = new _B.Logger('Log');
 import { Expect, MatchError } from 'alsatian';
 import { expect } from 'chai';
 
-// @todo: improve with passing ExpectationAdapter
-
 export interface IAwesomeMatchersConfig {
-  testRuntime: null | 'chai' | 'alsatian';
+  matchAdaptor: IMatchAdaptor | null; // initially null, but must be configured
 }
 
 export const awesomeMatchersConfig: IAwesomeMatchersConfig = {
-  testRuntime: null,
+  matchAdaptor: null,
 };
 
+export interface IMatchResult {
+  //@todo <T>
+  isPassed: boolean;
+  shouldMatch: boolean;
+  isMatch: boolean;
+
+  title: string;
+  explain: string;
+  // whether to use the left & right values or just ignore them (all info is in the message)
+  useValues: boolean;
+  // eg the left value, such as 'actual' or 'got' in alsatian
+  leftName?: string;
+  // eg the right value, such as ''expected' in mocha or ''expect' in alsatian
+  rightName?: string;
+
+  // Values might be the original whole value of comparison
+  // or just an extract from them, eg:
+  //  - a specific path's value
+  //  - a _.difference or a _.type etc
+  leftValue?: any; // eg the value we got as different @todo TReturn;
+  rightValue?: any; //eg the value we expected @todo TReturn;
+
+  actual?: any; // @todo: TActual
+  expected?: any; // @todo: TExpected
+}
+
+export type IMatchAdaptor = (matchResult: IMatchResult) => void;
+
 const cfg = awesomeMatchersConfig;
+
+const checkAdaptor = () => { // @todo: use as guard
+  if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+};
 
 /***
  Using _B.isXXX to construct some helpers
@@ -27,66 +57,48 @@ const cfg = awesomeMatchersConfig;
  */
 const are = (name, shouldMatch = true) => {
   return (actual, expected) => {
+    if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+    
     const path = [];
-    const isMatching = _B[name](actual, expected, {
+    const isMatch = _B[name](actual, expected, {
       path,
       allProps: true,
       exclude: ['inspect'],
     });
 
+    const mr = {
+      isPassed: false,
+      shouldMatch,
+      isMatch,
+      leftName: 'left value',
+      rightName: 'right value',
+    };
+
     if (shouldMatch) {
-      if (!isMatching) {
-        const explain = [
-          `Match Error: Wrong Difference:\n`,
-          `It should | ACTUAL ${name} EXPECTED | but they are NOT.\n`,
-          `At path: '${path.join('.')}'`,
-          ' \n ### VALUES ### ',
-          ' \n left value = ', // @todo: add \n if they not scalar
-          _B.getp(actual, path),
-          ' \n right value = ', // @todo: add \n if they not scalar`
-          _B.getp(expected, path),
-          ' \n \n ### OBJECTS ###', // @todo: only if they are objects
-          // @todo: make it configurable
-          ' \n left Object = \n',
-          actual,
-          ' \n right Object = \n',
-          expected,
-        ]; // @todo: seperate them and then compose 'em :-)
-
-        // @todo: make configurable from with MatcherAdaptor
-        switch (cfg.testRuntime) {
-          case 'alsatian': {
-            throw new MatchError(
-              _.take(explain, 3).join(''),
-              _B.getp(expected, path),
-              _B.getp(actual, path),
-            );
-          }
-          case 'chai': {
-            // @todo: get rid of AssertionError: expected false to be true
-            l.warn(...explain);
-            expect(isMatching).to.be.true;
-          }
-        }
+      if (!isMatch) {
+        cfg.matchAdaptor({
+          ...mr,
+          title: `Match Error: Wrong ${name} Difference`,
+          explain:
+            `It should | ACTUAL ${name} EXPECTED | but they are NOT. \n` +
+            `At path: '${path.join('.')}'`,
+          useValues: true,
+          leftValue: _B.getp(actual, path),
+          rightValue: _B.getp(expected, path),
+          // actual,
+          // expected,
+        });
       }
-    } else {
-      // they !shouldMatch
-      if (isMatching) {
-        const explain = [
-          `Match Error: Wrong similarity:\n` +
-            `It should | NOT ACTUAL ${name} EXPECTED | but they are.`,
-        ];
-
-        switch (cfg.testRuntime) {
-          case 'alsatian': {
-            throw new MatchError(...explain);
-          }
-          case 'chai': {
-            l.warn(...explain);
-            expect(isMatching).to.be.false
-          }
-        }
-      }
+    } else if (isMatch) {
+      // they NOT shouldMatch (~ but they did!)
+      cfg.matchAdaptor({
+        ...mr,
+        title: `Match Error: Wrong ${name} similarity`,
+        explain: `It should | NOT ACTUAL ${name} EXPECTED | but they are.`,
+        useValues: true,
+        leftValue: actual,
+        rightValue: expected,
+      });
     }
   };
 };
@@ -125,8 +137,12 @@ const are = (name, shouldMatch = true) => {
 //   };
 // };
 
+
+// @todo: refactor all those
 export const is = (actual, expected) => {
-  switch (cfg.testRuntime) {
+  if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+  
+  switch (cfg.matchAdaptor['testRuntime']) {
     case 'alsatian':
       Expect(actual).toBe(expected);
       break;
@@ -138,7 +154,9 @@ export const is = (actual, expected) => {
 };
 
 export const isnt = (actual, expected) => {
-  switch (cfg.testRuntime) {
+  if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+  
+  switch (cfg.matchAdaptor['testRuntime']) {
     case 'alsatian':
       Expect(actual).not.toBe(expected);
       break;

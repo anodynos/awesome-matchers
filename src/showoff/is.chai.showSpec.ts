@@ -1,8 +1,9 @@
 import { awesomeMatchersConfig, is, isnt } from '../awesomeMatchers';
 import { theAnswerToLife } from '../fixtures/_fixtures';
 import { expect } from 'chai';
+import { chaiAdaptor } from '../adaptors';
 
-awesomeMatchersConfig.testRuntime = 'chai';
+awesomeMatchersConfig.matchAdaptor = chaiAdaptor;
 
 describe('IsChaiShowSpec', () => {
   describe('is_isnt_shouldPass', () => {

@@ -1,15 +1,17 @@
 import {
-  AsyncSetup,
-  AsyncTeardown,
-  AsyncTest,
-  Expect, FocusTest, FocusTests,
-  IgnoreTest, IgnoreTests, Setup, Test,
+  Expect,
+  Test,
   TestFixture,
 } from 'alsatian';
-import { isEqual, isntEqual } from '../awesomeMatchers';
+
+// own
+import { awesomeMatchersConfig, isEqual, isntEqual } from '../awesomeMatchers';
+import { alsatianAdaptor } from '../adaptors';
+
+// data
 import { john, john2, maria } from '../fixtures/_fixtures';
-import * as _ from 'lodash';
-import * as _B from 'uberscore';
+
+awesomeMatchersConfig.matchAdaptor = alsatianAdaptor;
 
 @TestFixture()
 // @FocusTests
