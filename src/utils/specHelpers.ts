@@ -11,11 +11,11 @@ import { expect } from 'chai';
 // @todo: improve with passing ExpectationAdapter
 
 export interface IAwesomeMatchersConfig {
-  testRuntime: null | 'chai' | 'alsatian'
+  testRuntime: null | 'chai' | 'alsatian';
 }
 
 export const awesomeMatchersConfig: IAwesomeMatchersConfig = {
-  testRuntime: null
+  testRuntime: null,
 };
 
 const cfg = awesomeMatchersConfig;
@@ -34,12 +34,12 @@ const are = (name, shouldMatch = true) => {
       allProps: true,
       exclude: ['inspect'],
     });
-    
+
     if (shouldMatch) {
       if (!isMatching) {
         const explain = [
           `Match Error: Wrong Difference:\n`,
-          `Expecting that ACTUAL ${name} EXPECTED but they are NOT.\n`,
+          `It should ACTUAL ${name} EXPECTED but they are NOT.\n`,
           `At path: '${path.join('.')}'`,
           ' \n ### VALUES ### ',
           ' \n left value = ', // @todo: add \n if they not scalar
@@ -47,14 +47,13 @@ const are = (name, shouldMatch = true) => {
           ' \n right value = ', // @todo: add \n if they not scalar`
           _B.getp(expected, path),
           ' \n \n ### OBJECTS ###', // @todo: only if they are objects
-                                    // @todo: make it configurable
+          // @todo: make it configurable
           ' \n left Object = \n',
           actual,
           ' \n right Object = \n',
           expected,
         ]; // @todo: seperate them and then compose 'em :-)
-        
-        
+
         // @todo: make configurable from with MatcherAdaptor
         switch (cfg.testRuntime) {
           case 'alsatian': {
@@ -65,26 +64,27 @@ const are = (name, shouldMatch = true) => {
             );
           }
           case 'chai': {
+            // @todo: get rid of AssertionError: expected false to be true
             l.warn(...explain);
-            expect(isMatching).to.be['true'];
+            expect(isMatching).to.be.true;
           }
         }
       }
-    } else { // they !shouldMatch
+    } else {
+      // they !shouldMatch
       if (isMatching) {
         const explain = [
           `Match Error: Wrong similarity:\n` +
-          `Expecting that 'actual' VS 'expected' should NOT BE _B.${name} but they actually are.`
+            `It should NOT ACTUAL ${name} EXPECTED but they are.`,
         ];
-      
+
         switch (cfg.testRuntime) {
           case 'alsatian': {
-            throw new MatchError(...explain)
+            throw new MatchError(...explain);
           }
           case 'chai': {
-            l.err('CHAI', explain)
-            l.warn(...explain)
-            expect(isMatching).to.be['false'];
+            l.warn(...explain);
+            expect(isMatching).to.be.false
           }
         }
       }
@@ -131,26 +131,25 @@ export const is = (actual, expected) => {
     case 'alsatian':
       Expect(actual).toBe(expected);
       break;
-    
+
     case 'chai':
       expect(actual).to.be.equal(expected);
       break;
-    
   }
-}
+};
 
 export const isnt = (actual, expected) => {
   switch (cfg.testRuntime) {
     case 'alsatian':
       Expect(actual).not.toBe(expected);
       break;
-    
+
     case 'chai':
       expect(actual).not.to.be.equal(expected);
       break;
   }
-}
-export const [toBe, notToBe ] = [is, isnt];
+};
+export const [toBe, notToBe] = [is, isnt];
 
 export const ok = a => Expect(a).toBeTruthy();
 export const notOk = a => Expect(a).not.toBeTruthy();
@@ -174,10 +173,4 @@ export const iamNotLike = _.flip(isNotLike);
 // exp
 export const last = (items: any[], item) => {
   // if _.last(items) === item @todo: abstract it away to use createXXX
-}
-
-
-
-
-
-
+};
