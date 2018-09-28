@@ -1,10 +1,10 @@
-import { awesomeMatchersConfig, is, isnt } from './utils/specHelpers';
-import { equals, notEquals } from './utils/specHelpers';
-import { john, john2, maria } from './fixtures/_fixtures';
+import { awesomeMatchersConfig, is, isnt } from '../awesomeMatchers';
+import { equals, notEquals } from '../awesomeMatchers';
+import { john, john2, maria } from '../fixtures/_fixtures';
 
 awesomeMatchersConfig.testRuntime = 'chai';
 
-describe("EqualsItChaiSpec", () => {
+describe("EqualsChaiShowSpec", () => {
   it("itEquals_ItNotEquals_shouldPass", () => {
     equals(john2, john, );
     notEquals(maria, john, );

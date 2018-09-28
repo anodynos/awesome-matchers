@@ -6,15 +6,15 @@ import {
   IgnoreTest, IgnoreTests, Setup, Test,
   TestFixture,
 } from 'alsatian';
-import { equals, notEquals } from './utils/specHelpers';
-import { john, john2, maria } from './fixtures/_fixtures';
+import { equals, notEquals } from '../awesomeMatchers';
+import { john, john2, maria } from '../fixtures/_fixtures';
 import * as _ from 'lodash';
 import * as _B from 'uberscore';
 
 @TestFixture()
 // @FocusTests
 // @IgnoreTests()
-export class EqualsItAlsatianSpec {
+export class EqualsAlsatianShowSpec {
   
   @Test()
   itEquals_ItNotEquals_shouldPass() {
