@@ -26,17 +26,17 @@ const cfg = awesomeMatchersConfig;
 /*
   Helper for _B.isEqual & _B.isLike that prints the path where discrepancy was found.
  */
-const are = (name, asEqual = true) => {
+const are = (name, shouldMatch = true) => {
   return (actual, expected) => {
     const path = [];
-    const isEq = _B[name](actual, expected, {
+    const isMatching = _B[name](actual, expected, {
       path,
       allProps: true,
       exclude: ['inspect'],
     });
     
-    if (asEqual) {
-      if (!isEq) {
+    if (shouldMatch) {
+      if (!isMatching) {
         const explain = [
           `Match Error: Wrong Difference:\n`,
           `Expecting that ACTUAL ${name} EXPECTED but they are NOT.\n`,
@@ -66,23 +66,25 @@ const are = (name, asEqual = true) => {
           }
           case 'chai': {
             l.warn(...explain);
-            expect(isEq).to.be['true'];
+            expect(isMatching).to.be['true'];
           }
         }
       }
-    } else {
-      if (isEq) {
+    } else { // they !shouldMatch
+      if (isMatching) {
         const explain = [
-          `Matcher error: Wrong similarity:\n` +
+          `Match Error: Wrong similarity:\n` +
           `Expecting that 'actual' VS 'expected' should NOT BE _B.${name} but they actually are.`
         ];
       
         switch (cfg.testRuntime) {
-          case 'alsatian':
+          case 'alsatian': {
             throw new MatchError(...explain)
+          }
           case 'chai': {
+            l.err('CHAI', explain)
             l.warn(...explain)
-            expect(isEq).to.be['false'];
+            expect(isMatching).to.be['false'];
           }
         }
       }
@@ -124,9 +126,32 @@ const are = (name, asEqual = true) => {
 //   };
 // };
 
-export const is = (actual, expected) => Expect(actual).toBe(expected);
-export const isnt = (actual, expected) => Expect(actual).not.toBe(expected);
+export const is = (actual, expected) => {
+  switch (cfg.testRuntime) {
+    case 'alsatian':
+      Expect(actual).toBe(expected);
+      break;
+    
+    case 'chai':
+      expect(actual).to.be.equal(expected);
+      break;
+    
+  }
+}
+
+export const isnt = (actual, expected) => {
+  switch (cfg.testRuntime) {
+    case 'alsatian':
+      Expect(actual).not.toBe(expected);
+      break;
+    
+    case 'chai':
+      expect(actual).not.to.be.equal(expected);
+      break;
+  }
+}
 export const [toBe, notToBe ] = [is, isnt];
+
 export const ok = a => Expect(a).toBeTruthy();
 export const notOk = a => Expect(a).not.toBeTruthy();
 export const tru = a => Expect(a).toBe(true);

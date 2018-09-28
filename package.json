@@ -11,7 +11,7 @@
     "compile:watch": "tsc -w",
     "compile": "tsc",
     "test:alsatian": "NODE_ENV=test alsatian \"./dist/**/*.alsatian.spec.js\" -t 10000 --tap | tap-spec",
-    "test:mocha": "NODE_ENV=test mocha \"./dist/**/*.mocha.spec.js\"",
+    "test:mocha": "NODE_ENV=test mocha \"./dist/**/*.chai.spec.js\"",
     "test-coverage": "nyc --reporter=lcov --reporter=html npm test:alsatian && nyc report",
     "test:alsatian:watch": "nodemon --config nodemon.json --exec npm run test:alsatian",
     "test:mocha:watch": "nodemon --config nodemon.json --exec npm run test:mocha",
