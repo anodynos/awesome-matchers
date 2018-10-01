@@ -10,7 +10,7 @@ import { chaiAdaptor } from '../adaptors';
 
 awesomeMatchersConfig.matchAdaptor = chaiAdaptor;
 
-describe.only('EqualSetChaiShowSpec', () => {
+describe('EqualSetChaiShowSpec', () => {
   it('equalSet_byStrictEquality_shouldPass', () => {
     equalSet([1, 2, john, 3], [3, john, 2, 1]);
   });

@@ -1,5 +1,5 @@
 import {
-  Expect,
+  Expect, FocusTest,
   Test,
   TestFixture,
 } from 'alsatian';

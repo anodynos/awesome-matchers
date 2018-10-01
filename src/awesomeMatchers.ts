@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 const l = new _B.Logger('Log');
 
 // @todo: extract expects & framework specifics
-import { Expect, MatchError } from 'alsatian';
+import { Expect } from 'alsatian';
 import { expect } from 'chai';
 import isArraySetEqual from './utils/isArraySetEqual';
 
