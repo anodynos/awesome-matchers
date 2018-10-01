@@ -18,6 +18,8 @@
     "noImplicitAny": false /* Raise error on expressions and declarations with an implied 'any' type. */,
     "inlineSourceMap": true /* Emit a single file with source maps instead of having a separate file. */,
     "inlineSources": true /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */,
+    "declaration": true,
+    "declarationMap": true,
     "suppressImplicitAnyIndexErrors": true,
     "strictPropertyInitialization": false,
     "typeRoots": ["./node_modules/@types"] /* List of folders to include type definitions from. */,

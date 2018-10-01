@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { awesomeMatchersConfig, isEqual, isntEqual } from '../awesomeMatchers';
 import { john, john2, maria } from '../fixtures/_fixtures';
-import { chaiAdaptor } from '../adaptors';
+import { chaiAdaptor } from '../adaptors/chaiAdaptor';
 
 awesomeMatchersConfig.matchAdaptor = chaiAdaptor;
 

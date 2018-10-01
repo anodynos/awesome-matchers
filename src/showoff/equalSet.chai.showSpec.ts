@@ -6,7 +6,7 @@ import {
   equalSet, notEqualSet,
 } from '../awesomeMatchers';
 import { john, john2, johnLike, maria } from '../fixtures/_fixtures';
-import { chaiAdaptor } from '../adaptors';
+import { chaiAdaptor } from '../adaptors/chaiAdaptor';
 
 awesomeMatchersConfig.matchAdaptor = chaiAdaptor;
 

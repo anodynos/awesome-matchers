@@ -6,7 +6,7 @@ import {
 
 // own
 import { awesomeMatchersConfig, isEqual, isntEqual } from '../awesomeMatchers';
-import { alsatianAdaptor } from '../adaptors';
+import { alsatianAdaptor } from '../adaptors/alsatianAdaptor';
 
 // data
 import { john, john2, maria } from '../fixtures/_fixtures';

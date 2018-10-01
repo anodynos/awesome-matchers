@@ -11,8 +11,10 @@
     "start:show": "npm-run-all clean && mkdir -p dist && npm-run-all --parallel compile:watch test:show:alsatian:watch test:show:chai:watch ",
     "start:show:alsatian": "npm-run-all clean && mkdir -p dist && npm-run-all --parallel compile:watch test:show:alsatian:watch",
     "start:show:chai": "npm-run-all clean && mkdir -p dist && npm-run-all --parallel compile:watch test:show:chai:watch",
+    "build": "mkdir -p dist && npm run compile",
     "compile:watch": "tsc -w",
     "compile": "tsc",
+    "postinstall": "npm-run-all compile",
     "test": "NODE_ENV=test alsatian \"./dist/**/*.spec.js\" -t 10000 --tap | tap-spec",
     "test:show:alsatian": "NODE_ENV=test alsatian \"./dist/**/*.alsatian.showSpec.js\" -t 10000 --tap | tap-spec",
     "test:show:chai": "NODE_ENV=test mocha \"./dist/**/*.chai.showSpec.js\"",
@@ -21,7 +23,6 @@
     "test-coverage": "nyc --reporter=lcov --reporter=html npm test:alsatian && nyc report",
     "test-ci:alsatian:unit": "NODE_ENV=test alsatian \"./dist/test/**/*.alsatian.spec.js\" --tap | tap-xunit-alsatian > result/test_result.xml",
     "test-ci:alsatian": "mkdir -p result && sleep 5 && nyc --reporter=clover --report-dir=result/coverage npm run test-ci:unit ",
-    "build": "mkdir -p dist && npm run compile",
     "precommit": "lint-staged",
     "postcommit": "git update-index -g",
     "release": "standard-version"
@@ -52,7 +53,6 @@
     "@types/lodash": "^4.14.116",
     "@types/mocha": "^5.2.5",
     "@types/node": "^9.6.32",
-    "alsatian": "^2.3.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
@@ -78,10 +78,12 @@
   "dependencies": {
     "lodash": "^4.17.11",
     "uberscore": "0.0.19",
+    "alsatian": "^2.3.0",
     "chai": "^4.2.0"
   },
   "repository": {
     "type": "git",
-    "url": ""
-  }
+    "url": "https://github.com/anodynos/awesome-matchers"
+  },
+  "main": "dist/index.js"
 }

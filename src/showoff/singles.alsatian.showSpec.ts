@@ -1,6 +1,6 @@
 import { Expect, FocusTest, FocusTests, Test, TestFixture } from 'alsatian';
 import { awesomeMatchersConfig, fals, notOk, ok, tru } from '../awesomeMatchers';
-import { alsatianAdaptor } from '../adaptors';
+import { alsatianAdaptor } from '../adaptors/alsatianAdaptor';
 
 awesomeMatchersConfig.matchAdaptor = alsatianAdaptor;
 

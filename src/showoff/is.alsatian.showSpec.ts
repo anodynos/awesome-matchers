@@ -1,7 +1,7 @@
 import { Expect, FocusTest, FocusTests, Test, TestFixture } from 'alsatian';
 import { awesomeMatchersConfig, is, isnt } from '../awesomeMatchers';
 import { theAnswerToLife } from '../fixtures/_fixtures';
-import { alsatianAdaptor } from '../adaptors';
+import { alsatianAdaptor } from '../adaptors/alsatianAdaptor';
 
 awesomeMatchersConfig.matchAdaptor = alsatianAdaptor;
 

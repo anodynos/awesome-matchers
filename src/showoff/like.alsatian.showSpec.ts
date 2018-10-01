@@ -8,7 +8,7 @@ import {
 } from 'alsatian';
 import { isEqual, isLike, isntLike, isntEqual, iamLike, iamNotLike, awesomeMatchersConfig } from '../awesomeMatchers';
 import { john, john2, johnLike, maria } from '../fixtures/_fixtures';
-import { alsatianAdaptor } from '../adaptors';
+import { alsatianAdaptor } from '../adaptors/alsatianAdaptor';
 
 awesomeMatchersConfig.matchAdaptor = alsatianAdaptor;
 // awesomeMatchersConfig.testRuntime = 'alsatian';
