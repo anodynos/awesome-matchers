@@ -1,23 +1,31 @@
 import * as _ from 'lodash';
 import * as _B from 'uberscore';
 import {
-  Expect, FocusTest,
-  FocusTests, IgnoreTest,
+  Expect,
+  FocusTest,
+  FocusTests,
+  IgnoreTest,
   Test,
   TestFixture,
 } from 'alsatian';
-import { isEqual, isLike, isntLike, isntEqual, iamLike, iamNotLike, awesomeMatchersConfig } from '../awesomeMatchers';
+import {
+  isEqual,
+  isLike,
+  isntLike,
+  isntEqual,
+  iamLike,
+  iamNotLike,
+  awesomeMatchersConfig,
+} from '../awesomeMatchers';
 import { john, john2, johnLike, maria } from '../fixtures/_fixtures';
 import { alsatianAdaptor } from '../adaptors/alsatianAdaptor';
 
 awesomeMatchersConfig.matchAdaptor = alsatianAdaptor;
-// awesomeMatchersConfig.testRuntime = 'alsatian';
 
 @TestFixture()
 // @FocusTests
 // @IgnoreTests()
 export class LikeAlsatianShowSpec {
-  
   @Test()
   // @IgnoreTest()
   expectIsLike_shouldPass() {
@@ -32,7 +40,7 @@ export class LikeAlsatianShowSpec {
   itIsLike_shouldPass() {
     isLike(johnLike, john2);
     iamLike(john2, johnLike);
-    
+
     isntLike(maria, john);
     iamNotLike(john, maria);
   }
@@ -42,7 +50,7 @@ export class LikeAlsatianShowSpec {
   expectIsLike_shouldFail() {
     Expect(_B.isLike(maria, john)).toBe(true);
   }
-  
+
   @Test()
   itIsLike_shouldFail() {
     isLike(maria, john);
@@ -53,7 +61,7 @@ export class LikeAlsatianShowSpec {
   expectIsntLike_shouldFail() {
     Expect(_B.isLike(johnLike, john)).toBe(false);
   }
-  
+
   @Test()
   itIsntLike_shouldFail() {
     isntLike(johnLike, john);

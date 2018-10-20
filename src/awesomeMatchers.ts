@@ -17,7 +17,7 @@ export const awesomeMatchersConfig: IAwesomeMatchersConfig = {
 };
 
 export interface IMatchResult {
-  //@todo <T>
+  // @todo <T>
   isPassed: boolean;
   shouldMatch: boolean;
   isMatch: boolean;
@@ -36,7 +36,7 @@ export interface IMatchResult {
   //  - a specific path's value
   //  - a _.difference or a _.type etc
   leftValue?: any; // eg the value we got as different @todo TReturn;
-  rightValue?: any; //eg the value we expected @todo TReturn;
+  rightValue?: any; // eg the value we expected @todo TReturn;
 
   actual?: any; // @todo: TActual
   expected?: any; // @todo: TExpected
@@ -46,8 +46,11 @@ export type IMatchAdaptor = (matchResult: IMatchResult) => void;
 
 const cfg = awesomeMatchersConfig;
 
-const checkAdaptor = () => { // @todo: use as guard
-  if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+const checkAdaptor = () => {
+  // @todo: use as guard
+  if (!cfg.matchAdaptor) {
+    throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+  }
 };
 
 /***
@@ -56,18 +59,22 @@ const checkAdaptor = () => { // @todo: use as guard
 /*
   Helper for _B.isEqual & _B.isLike that prints the path where discrepancy was found.
  */
-const are = (name, shouldMatch = true) => {
+const are = (op, name = op, shouldMatch = true, flipped = false) => {
   return (actual, expected) => {
-    if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
-    
+    if (!cfg.matchAdaptor) {
+      throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+    }
+
+    // try {
     const path = [];
-    const isMatch = _B[name](actual, expected, {
+    const isMatch = _B[op](actual, expected, {
       path,
       allProps: true,
       exclude: ['inspect'],
     });
 
     const mr = {
+      // @todo: Partial<IMatchResult> = {
       isPassed: false,
       shouldMatch,
       isMatch,
@@ -79,13 +86,13 @@ const are = (name, shouldMatch = true) => {
       if (!isMatch) {
         cfg.matchAdaptor({
           ...mr,
-          title: `Match Error: Wrong ${name} Difference`,
+          title: `Match Error: Wrong '${name}' Difference (using ${op})`,
           explain:
             `It should | ACTUAL ${name} EXPECTED | but they are NOT. \n` +
             `At path: '${path.join('.')}'`,
           useValues: true,
-          leftValue: _B.getp(actual, path),
-          rightValue: _B.getp(expected, path),
+          leftValue: flipped ? _B.getp(expected, path) : _B.getp(actual, path),
+          rightValue: flipped ? _B.getp(actual, path) : _B.getp(expected, path),
           // actual,
           // expected,
         });
@@ -94,23 +101,28 @@ const are = (name, shouldMatch = true) => {
       // they NOT shouldMatch (~ but they did!)
       cfg.matchAdaptor({
         ...mr,
-        title: `Match Error: Wrong NOT ${name} similarity`,
-        explain: `It should | NOT ACTUAL ${name} EXPECTED | but they are.`,
+        title: `Match Error: Wrong NOT shouldMatch '${name}' similarity (using ${op})`,
+        explain: `It should | ACTUAL ${name} EXPECTED | but they are.`,
         useValues: true,
-        leftValue: actual,
-        rightValue: `a value that's NOT ${name}`,
+        leftValue: flipped ? expected : actual,
+        rightValue: `a value that's NOT ${op}`,
       });
     }
+    // } catch (err) {
+    //   console.log('ERRRRRRRRROR', err)
+    // }
   };
 };
 
 const createEqualSet = (shouldMatch = true) => {
   return (actual, expected, comparator1?, comparator2?) => {
-    if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
-  
+    if (!cfg.matchAdaptor) {
+      throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+    }
+
     if (!comparator1) comparator1 = (a, b) => a === b;
     if (!comparator2) comparator2 = _.flip(comparator1);
-    
+
     const isMatch = isArraySetEqual(actual, expected, comparator1, comparator2);
     const mr = {
       isPassed: false,
@@ -137,7 +149,7 @@ const createEqualSet = (shouldMatch = true) => {
         ...mr,
         title: `Match Error: Wrong NOT isArraySetEqual equivalence`,
         explain: `It should | NOT ACTUAL isArraySetEqual EXPECTED | but they are isArraySetEqual equivalent.`,
-        useValues: false
+        useValues: false,
       });
     }
   };
@@ -145,9 +157,11 @@ const createEqualSet = (shouldMatch = true) => {
 
 // @todo: refactor all those
 export const is = (actual, expected) => {
-  if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
-  
-  switch (cfg.matchAdaptor['testRuntime']) {
+  if (!cfg.matchAdaptor) {
+    throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+  }
+
+  switch (cfg.matchAdaptor['adaptorName']) {
     case 'alsatian':
       Expect(actual).toBe(expected);
       break;
@@ -155,13 +169,22 @@ export const is = (actual, expected) => {
     case 'chai':
       expect(actual).to.be.equal(expected);
       break;
+
+    default:
+      throw new Error(
+        `awesomeMatchersConfig.matchAdaptor has unknown adaptorName: ${
+          cfg.matchAdaptor['adaptorName']
+        }`!,
+      );
   }
 };
 
 export const isnt = (actual, expected) => {
-  if (!cfg.matchAdaptor) throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
-  
-  switch (cfg.matchAdaptor['testRuntime']) {
+  if (!cfg.matchAdaptor) {
+    throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+  }
+
+  switch (cfg.matchAdaptor['adaptorName']) {
     case 'alsatian':
       Expect(actual).not.toBe(expected);
       break;
@@ -169,8 +192,18 @@ export const isnt = (actual, expected) => {
     case 'chai':
       expect(actual).not.to.be.equal(expected);
       break;
+
+    default:
+      throw new Error(
+        `awesomeMatchersConfig.matchAdaptor has unknown adaptorName: ${
+          cfg.matchAdaptor['adaptorName']
+        }`!,
+      );
   }
 };
+
+// const flipWithProperNames = (f) => (expected, actual) =>
+
 export const [toBe, notToBe] = [is, isnt];
 
 export const ok = a => Expect(a).toBeTruthy();
@@ -182,17 +215,18 @@ export const equalSet = createEqualSet();
 export const notEqualSet = createEqualSet(false);
 
 export const isEqual = are('isEqual');
-export const isntEqual = are('isEqual', false);
+export const isntEqual = are('isEqual', 'isntEqual', false);
 export const isExact = are('isExact');
-export const isntExact = are('isExact', false);
+export const isntExact = are('isExact', 'isntExact', false);
 export const isIqual = are('isIqual');
-export const isntIqual = are('isIqual', false);
+export const isntIqual = are('isIqual', 'isntIqual', false);
 export const isIxact = are('isIxact');
-export const isntIxact = are('isIxact', false);
+export const isntIxact = are('isIxact', 'isntIxact', false);
 export const isLike = are('isLike');
-export const isntLike = are('isLike', false);
-export const iamLike = _.flip(isLike);
-export const iamNotLike = _.flip(isntLike);
+export const isntLike = are('isLike', 'isntLike', false);
+
+export const iamLike = _.flip(are('isLike', 'iamLike', true, true));
+export const iamNotLike = _.flip(are('isLike', 'iamNotLike', false, true));
 
 // exp
 export const last = (items: any[], item) => {
