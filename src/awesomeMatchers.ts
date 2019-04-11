@@ -7,51 +7,15 @@ const l = new _B.Logger('Log');
 import { Expect } from 'alsatian';
 import { expect } from 'chai';
 import isArraySetEqual from './utils/isArraySetEqual';
+import { IAwesomeMatchersConfig } from './types';
 
-export interface IAwesomeMatchersConfig {
-  matchAdaptor: IMatchAdaptor | null; // initially null, but must be configured
-}
-
-export const awesomeMatchersConfig: IAwesomeMatchersConfig = {
-  matchAdaptor: null,
-};
-
-export interface IMatchResult {
-  // @todo <T>
-  isPassed: boolean;
-  shouldMatch: boolean;
-  isMatch: boolean;
-
-  title: string;
-  explain: string;
-  // whether to use the left & right values or just ignore them (all info is in the message)
-  useValues: boolean;
-  // eg the left value, such as 'actual' or 'got' in alsatian
-  leftName?: string;
-  // eg the right value, such as ''expected' in mocha or ''expect' in alsatian
-  rightName?: string;
-
-  // Values might be the original whole value of comparison
-  // or just an extract from them, eg:
-  //  - a specific path's value
-  //  - a _.difference or a _.type etc
-  leftValue?: any; // eg the value we got as different @todo TReturn;
-  rightValue?: any; // eg the value we expected @todo TReturn;
-
-  actual?: any; // @todo: TActual
-  expected?: any; // @todo: TExpected
-}
-
-export type IMatchAdaptor = (matchResult: IMatchResult) => void;
-
-const cfg = awesomeMatchersConfig;
-
-const checkAdaptor = () => {
-  // @todo: use as guard
-  if (!cfg.matchAdaptor) {
+const cfg: IAwesomeMatchersConfig = {
+  matchAdaptor: () => {
     throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
-  }
+  },
 };
+
+export const awesomeMatchersConfig = cfg;
 
 /***
  Using _B.isXXX to construct some helpers
@@ -61,10 +25,6 @@ const checkAdaptor = () => {
  */
 const are = (op, name = op, shouldMatch = true, flipped = false) => {
   return (actual, expected) => {
-    if (!cfg.matchAdaptor) {
-      throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
-    }
-
     // try {
     const path = [];
     const isMatch = _B[op](actual, expected, {

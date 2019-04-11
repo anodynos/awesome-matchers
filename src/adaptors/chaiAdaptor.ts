@@ -1,6 +1,11 @@
 import * as _B from 'uberscore';
-import { IMatchAdaptor, IMatchResult } from '../awesomeMatchers';
-import { expect } from 'chai';
+import { IMatchAdaptor, IMatchResult } from '../types';
+
+let expect;
+
+try {
+  expect = require('chai').expect;
+} catch (ignore) {}
 
 const chaiLog = new _B.Logger('chaiLog');
 
@@ -26,7 +31,9 @@ export const chaiAdaptor: IMatchAdaptor = (mr: IMatchResult) => {
   // mr.expected
 
   chaiLog.warn(...messages);
-  expect(mr.isMatch).to.be[mr.shouldMatch + '']; // @todo: fix to integrate with chai properly
+  if (expect) expect(mr.isMatch).to.be[mr.shouldMatch + ''];
+  // @todo: fix to integrate with chai properly
+  else throw new Error('`chai` is missing from your node_modules');
 };
 
 (chaiAdaptor as any).adaptorName = 'chai';

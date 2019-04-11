@@ -1,5 +1,5 @@
-import { IMatchAdaptor, IMatchResult } from '../awesomeMatchers';
 import { MatchError } from 'alsatian';
+import { IMatchAdaptor, IMatchResult } from '../types';
 
 export const alsatianAdaptor: IMatchAdaptor = (mr: IMatchResult) => {
   const descr = `${mr.title}   (alsatianAdaptor) \n ${mr.explain}`;
