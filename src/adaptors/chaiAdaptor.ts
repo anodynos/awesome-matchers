@@ -1,39 +1,42 @@
 import * as _B from 'uberscore';
 import { IMatchAdaptor, IMatchResult } from '../types';
+import { expect } from 'chai';
 
-let expect;
+const l = new _B.Logger('chaiLog');
 
-try {
-  expect = require('chai').expect;
-} catch (ignore) {}
+export const chaiAdaptor: IMatchAdaptor = {
+  is: (actual, expected) => expect(actual).to.be.equal(expected),
+  isnt: (actual, expected) => expect(actual).not.to.be.equal(expected),
+  ok: actual => expect(actual).to.be.ok,
+  notOk: actual => expect(actual).not.be.ok,
+  tru: actual => expect(actual).to.be.true,
+  fals: actual => expect(actual).to.be.false,
+  generic: (mr: IMatchResult) => {
+    const messages = [mr.title + '  (chaiAdaptor)  \n', mr.explain];
 
-const chaiLog = new _B.Logger('chaiLog');
+    if (mr.useValues) {
+      messages.push(
+        ...[
+          ' \n ### VALUES ### ',
+          ` \n ${mr.leftName} = `, // @todo: add \n if they not scalar
+          mr.leftValue,
+          ` \n ${mr.rightName} = `, // @todo: add \n if they not scalar`
+          mr.rightValue,
+        ],
+      );
+    }
 
-export const chaiAdaptor: IMatchAdaptor = (mr: IMatchResult) => {
-  const messages = [mr.title + '  (chaiAdaptor) \n', mr.explain];
+    // @todo: configure those
+    // ' \n actual = \n',
+    // mr.actual,
+    // ' \n expected = \n',
+    // mr.expected
 
-  if (mr.useValues) {
-    messages.push(
-      ...[
-        ' \n ### VALUES ### ',
-        ` \n ${mr.leftName} = `, // @todo: add \n if they not scalar
-        mr.leftValue,
-        ` \n ${mr.rightName} = `, // @todo: add \n if they not scalar`
-        mr.rightValue,
-      ],
-    );
-  }
-
-  // @todo: configure those
-  // ' \n actual = \n',
-  // mr.actual,
-  // ' \n expected = \n',
-  // mr.expected
-
-  chaiLog.warn(...messages);
-  if (expect) expect(mr.isMatch).to.be[mr.shouldMatch + ''];
-  // @todo: fix to integrate with chai properly
-  else throw new Error('`chai` is missing from your node_modules');
+    l.warn(...messages);
+    if (expect) expect(mr.isMatch).to.be[mr.shouldMatch + ''];
+    // @todo: fix to integrate with chai properly
+    else throw new Error('`chai` is missing from your node_modules'); // make it a generic error in ALL 'methods' :-)
+  },
 };
 
 (chaiAdaptor as any).adaptorName = 'chai';

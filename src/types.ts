@@ -31,14 +31,18 @@ export interface IMatchResult {
   expected?: any; // @todo: TExpected
 }
 
-export type IMatchAdaptor = (matchResult: IMatchResult) => void;
+// export type IMatchAdaptor = (matchResult: IMatchResult) => void;
 
 // Refactor to more specifics
-//
-// export interface IMatchAdaptor {
-//   generic: (matchResult: IMatchResult) => void;
-//   is?: (matchResult: IMatchResult) => void;
-//   isnt?: (matchResult: IMatchResult) => void;
+export interface IMatchAdaptor {
+  generic: (matchResult: IMatchResult) => void;
+  is: (actual, expected) => void;
+  isnt: (actual, expected) => void;
+  ok: (actual) => void;
+  notOk: (actual) => void;
+  tru: (actual) => void;
+  fals: (actual) => void;
+}
 /*
   //Add all those
   

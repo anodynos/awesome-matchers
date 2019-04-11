@@ -4,17 +4,20 @@ import * as _ from 'lodash';
 const l = new _B.Logger('Log');
 
 // @todo: extract expects & framework specifics
-import { Expect } from 'alsatian';
-import { expect } from 'chai';
+
 import isArraySetEqual from './utils/isArraySetEqual';
 import { IAwesomeMatchersConfig } from './types';
 
-const cfg: IAwesomeMatchersConfig = {
-  matchAdaptor: () => {
-    throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
-  },
-};
-
+const methods = ['is', 'isnt', 'ok', 'notOk', 'tru', 'fals', 'generic'];
+const matchAdaptor: any = {};
+_.each(
+  methods,
+  method =>
+    (matchAdaptor[method] = () => {
+      throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
+    }),
+);
+const cfg: IAwesomeMatchersConfig = { matchAdaptor };
 export const awesomeMatchersConfig = cfg;
 
 /***
@@ -44,7 +47,7 @@ const are = (op, name = op, shouldMatch = true, flipped = false) => {
 
     if (shouldMatch) {
       if (!isMatch) {
-        cfg.matchAdaptor({
+        cfg.matchAdaptor.generic({
           ...mr,
           title: `Match Error: Wrong '${name}' Difference (using ${op})`,
           explain:
@@ -59,7 +62,7 @@ const are = (op, name = op, shouldMatch = true, flipped = false) => {
       }
     } else if (isMatch) {
       // they NOT shouldMatch (~ but they did!)
-      cfg.matchAdaptor({
+      cfg.matchAdaptor.generic({
         ...mr,
         title: `Match Error: Wrong NOT shouldMatch '${name}' similarity (using ${op})`,
         explain: `It should | ACTUAL ${name} EXPECTED | but they are.`,
@@ -94,7 +97,7 @@ const createEqualSet = (shouldMatch = true) => {
 
     if (shouldMatch) {
       if (!isMatch) {
-        cfg.matchAdaptor({
+        cfg.matchAdaptor.generic({
           ...mr,
           title: `Match Error: Wrong isArraySetEqual equivalence`,
           explain: `It should | ACTUAL isArraySetEqual EXPECTED | but they are not.`,
@@ -105,7 +108,7 @@ const createEqualSet = (shouldMatch = true) => {
       }
     } else if (isMatch) {
       // they NOT shouldMatch (~ but they did!)
-      cfg.matchAdaptor({
+      cfg.matchAdaptor.generic({
         ...mr,
         title: `Match Error: Wrong NOT isArraySetEqual equivalence`,
         explain: `It should | NOT ACTUAL isArraySetEqual EXPECTED | but they are isArraySetEqual equivalent.`,
@@ -115,61 +118,17 @@ const createEqualSet = (shouldMatch = true) => {
   };
 };
 
-// @todo: refactor all those
-export const is = (actual, expected) => {
-  if (!cfg.matchAdaptor) {
-    throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
-  }
-
-  switch (cfg.matchAdaptor['adaptorName']) {
-    case 'alsatian':
-      Expect(actual).toBe(expected);
-      break;
-
-    case 'chai':
-      expect(actual).to.be.equal(expected);
-      break;
-
-    default:
-      throw new Error(
-        `awesomeMatchersConfig.matchAdaptor has unknown adaptorName: ${
-          cfg.matchAdaptor['adaptorName']
-        }`!,
-      );
-  }
-};
-
-export const isnt = (actual, expected) => {
-  if (!cfg.matchAdaptor) {
-    throw new Error('No `awesomeMatchersConfig.matchAdaptor` configured!');
-  }
-
-  switch (cfg.matchAdaptor['adaptorName']) {
-    case 'alsatian':
-      Expect(actual).not.toBe(expected);
-      break;
-
-    case 'chai':
-      expect(actual).not.to.be.equal(expected);
-      break;
-
-    default:
-      throw new Error(
-        `awesomeMatchersConfig.matchAdaptor has unknown adaptorName: ${
-          cfg.matchAdaptor['adaptorName']
-        }`!,
-      );
-  }
-};
-
 // const flipWithProperNames = (f) => (expected, actual) =>
 
-export const [toBe, notToBe] = [is, isnt];
+export const is = (actual, expected) => cfg.matchAdaptor.is(actual, expected);
+export const isnt = (actual, expected) =>
+  cfg.matchAdaptor.isnt(actual, expected);
+export const [toBe, notBe] = [is, isnt]; // alias, used for coffeescript etc
 
-export const ok = a => Expect(a).toBeTruthy();
-export const notOk = a => Expect(a).not.toBeTruthy();
-export const tru = a => Expect(a).toBe(true);
-export const fals = a => Expect(a).toBe(false);
+export const ok = actual => cfg.matchAdaptor.ok(actual);
+export const notOk = actual => cfg.matchAdaptor.notOk(actual);
+export const tru = actual => cfg.matchAdaptor.tru(actual);
+export const fals = actual => cfg.matchAdaptor.fals(actual);
 
 export const equalSet = createEqualSet();
 export const notEqualSet = createEqualSet(false);
