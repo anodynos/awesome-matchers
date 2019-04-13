@@ -15,8 +15,10 @@
     "test": "NODE_ENV=test alsatian \"./dist/**/*.spec.js\" -t 10000 --tap | tap-spec",
     "test:show:alsatian": "NODE_ENV=test alsatian \"./dist/**/*.alsatian.showSpec.js\" -t 10000 --tap | tap-spec",
     "test:show:chai": "NODE_ENV=test mocha \"./dist/**/*.chai.showSpec.js\"",
+    "test:show:jest": "NODE_ENV=test jest --runInBand --detectOpenHandles --verbose --forceExit",
     "test:show:alsatian:watch": "nodemon --config nodemon.json --exec npm run test:show:alsatian",
     "test:show:chai:watch": "nodemon --config nodemon.json --exec npm run test:show:chai",
+    "test:show:jest:watch": "NODE_ENV=test jest --runInBand --watchAll",
     "test-coverage": "nyc --reporter=lcov --reporter=html npm test:alsatian && nyc report",
     "precommit": "lint-staged",
     "postcommit": "git update-index -g",
@@ -40,6 +42,7 @@
   "devDependencies": {
     "@types/bluebird": "3.5.21",
     "@types/chai": "^4.1.5",
+    "@types/jest": "^24.0.11",
     "@types/lodash": "^4.14.116",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.14.4",
@@ -48,6 +51,8 @@
     "husky": "^1.0.1",
     "jest": "^24.7.1",
     "jest-extended": "^0.11.1",
+    "jest-junit": "^6.3.0",
+    "ts-jest": "^24.0.0",
     "lint-staged": "^7.3.0",
     "mocha": "^5.2.0",
     "nodemon": "^1.12.1",
@@ -73,7 +78,8 @@
     "alsatian": "^2.4.0",
     "chai": "^4.2.0",
     "jest": "^24.7.1",
-    "jest-extended": "^0.11.1"
+    "jest-extended": "^0.11.1",
+    "jest-junit": "^6.3.0"
   },
   "repository": {
     "type": "git",

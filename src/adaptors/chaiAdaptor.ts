@@ -5,6 +5,7 @@ import { expect } from 'chai';
 const l = new _B.Logger('chaiLog');
 
 export const chaiAdaptor: IMatchAdaptor = {
+  adaptorName: 'chai',
   is: (actual, expected) => expect(actual).to.be.equal(expected),
   isnt: (actual, expected) => expect(actual).not.to.be.equal(expected),
   ok: actual => expect(actual).to.be.ok,
@@ -12,7 +13,7 @@ export const chaiAdaptor: IMatchAdaptor = {
   tru: actual => expect(actual).to.be.true,
   fals: actual => expect(actual).to.be.false,
   generic: (mr: IMatchResult) => {
-    const messages = [mr.title + '  (chaiAdaptor)  \n', mr.explain];
+    const messages = [mr.title + '  (chaiAdaptor.generic)  \n', mr.explain];
 
     if (mr.useValues) {
       messages.push(
@@ -38,5 +39,3 @@ export const chaiAdaptor: IMatchAdaptor = {
     else throw new Error('`chai` is missing from your node_modules'); // make it a generic error in ALL 'methods' :-)
   },
 };
-
-(chaiAdaptor as any).adaptorName = 'chai';

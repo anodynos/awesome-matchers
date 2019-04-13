@@ -10,7 +10,8 @@ export interface IMatchResult {
   isPassed: boolean;
   shouldMatch: boolean;
   isMatch: boolean;
-
+  op: string; // @todo: enum it
+  name: string;
   title: string;
   explain: string;
   // whether to use the left & right values or just ignore them (all info is in the message)
@@ -35,6 +36,7 @@ export interface IMatchResult {
 
 // Refactor to more specifics
 export interface IMatchAdaptor {
+  adaptorName: string;
   generic: (matchResult: IMatchResult) => void;
   is: (actual, expected) => void;
   isnt: (actual, expected) => void;
@@ -42,6 +44,10 @@ export interface IMatchAdaptor {
   notOk: (actual) => void;
   tru: (actual) => void;
   fals: (actual) => void;
+  isEqual?: (actual, expected) => void;
+  isntEqual?: (actual, expected) => void;
+  isLike?: (actual, expected) => void;
+  isntLike?: (actual, expected) => void;
 }
 /*
   //Add all those

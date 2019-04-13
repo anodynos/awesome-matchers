@@ -1,17 +1,16 @@
-import { expect } from 'chai';
 import * as _B from 'uberscore';
 
 import { awesomeMatchersConfig, isLike, isntLike } from '../awesomeMatchers';
 import { john, john2, johnLike, maria } from '../fixtures/_fixtures';
-import { chaiAdaptor } from '../adaptors/chaiAdaptor';
+import { jestAdaptor } from '../adaptors/jestAdaptor';
 
-awesomeMatchersConfig.matchAdaptor = chaiAdaptor;
+awesomeMatchersConfig.matchAdaptor = jestAdaptor;
 
-describe('LikeChaiShowSpec', () => {
+describe('LikeJestShowSpec', () => {
   describe('isLike_isntLike_shouldPass', () => {
-    it('chai.expect', () => {
-      expect(_B.isLike(johnLike, john)).to.be.true;
-      expect(_B.isLike(maria, john)).to.be.false;
+    it('jest.expect', () => {
+      expect(_B.isLike(johnLike, john)).toBe(true);
+      expect(_B.isLike(maria, john)).toBe(false);
     });
 
     it('awesomeMatchers', () => {
@@ -21,8 +20,8 @@ describe('LikeChaiShowSpec', () => {
   });
 
   describe('isLike_shouldFail', () => {
-    it('chai.expect', () => {
-      expect(_B.isLike(maria, john)).to.be.true;
+    it('jest.expect', () => {
+      expect(maria).toEqual(expect.objectContaining(john));
     });
 
     it('awesomeMatchers', () => {
@@ -30,9 +29,9 @@ describe('LikeChaiShowSpec', () => {
     });
   });
 
-  describe('isntLike_shouldFail', () => {
-    it('chai.expect', () => {
-      expect(_B.isLike(johnLike, john)).to.be.false;
+  describe.only('isntLike_shouldFail', () => {
+    it('jest.expect', () => {
+      expect(john).not.toEqual(expect.objectContaining(johnLike));
     });
 
     it('awesomeMatchers', () => {
