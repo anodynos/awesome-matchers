@@ -1,14 +1,15 @@
 import { Expect, FocusTest, FocusTests, Test, TestFixture } from 'alsatian';
-import { awesomeMatchersConfig, is, isnt } from '../awesomeMatchers';
-import { theAnswerToLife } from '../fixtures/_fixtures';
-import { alsatianAdaptor } from '../adaptors/alsatianAdaptor';
+import { AwesomeMatchers } from '../awesomeMatchers';
+import { alsatianAdaptor as matchAdaptor } from '../adaptors/alsatianAdaptor';
 
-awesomeMatchersConfig.matchAdaptor = alsatianAdaptor;
+const { is, isnt } = new AwesomeMatchers({ matchAdaptor });
+
+import { theAnswerToLife } from '../fixtures/_fixtures';
 
 @TestFixture()
 // @FocusTests
 export class IsAlsatianShowSpec {
-  //@todo: make `is` & `isnt` aliases to toBe & not.toBe
+  // @todo: make `is` & `isnt` aliases to toBe & not.toBe
 
   @Test()
   expectIs_itIsnt_shouldPass() {

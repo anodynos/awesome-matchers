@@ -1,26 +1,13 @@
 import * as _ from 'lodash';
 import * as _B from 'uberscore';
-import {
-  Expect,
-  FocusTest,
-  FocusTests,
-  IgnoreTest,
-  Test,
-  TestFixture,
-} from 'alsatian';
-import {
-  isEqual,
-  isLike,
-  isntLike,
-  isntEqual,
-  iamLike,
-  iamNotLike,
-  awesomeMatchersConfig,
-} from '../awesomeMatchers';
+import { Expect, FocusTest, FocusTests, Test, TestFixture } from 'alsatian';
+import { alsatianAdaptor as matchAdaptor } from '..';
+import { AwesomeMatchers } from '../awesomeMatchers';
 import { john, john2, johnLike, maria } from '../fixtures/_fixtures';
-import { alsatianAdaptor } from '../adaptors/alsatianAdaptor';
 
-awesomeMatchersConfig.matchAdaptor = alsatianAdaptor;
+const { isLike, isntLike, iamLike, iamNotLike } = new AwesomeMatchers({
+  matchAdaptor,
+});
 
 @TestFixture()
 // @FocusTests

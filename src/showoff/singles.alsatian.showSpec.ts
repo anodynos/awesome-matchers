@@ -1,12 +1,11 @@
 import { Expect, FocusTest, FocusTests, Test, TestFixture } from 'alsatian';
-import { awesomeMatchersConfig, fals, notOk, ok, tru } from '../awesomeMatchers';
-import { alsatianAdaptor } from '../adaptors/alsatianAdaptor';
+import { AwesomeMatchers } from '../awesomeMatchers';
+import { alsatianAdaptor as matchAdaptor } from '../adaptors/alsatianAdaptor';
 
-awesomeMatchersConfig.matchAdaptor = alsatianAdaptor;
+const { fals, notOk, ok, tru } = new AwesomeMatchers({ matchAdaptor });
 
 @TestFixture()
-export class IsAlsatianShowSpec {
-
+export class SinglesAlsatianShowSpec {
   @Test()
   expectOK() {
     Expect('some value').toBeTruthy();
@@ -14,9 +13,9 @@ export class IsAlsatianShowSpec {
 
   @Test()
   itOK() {
-    ok('some value')
+    ok('some value');
   }
-  
+
   @Test()
   expectNotOK() {
     Expect('').not.toBeTruthy();
@@ -24,9 +23,9 @@ export class IsAlsatianShowSpec {
 
   @Test()
   itNotOK() {
-    notOk('')
+    notOk('');
   }
-  
+
   @Test()
   expectTru() {
     Expect(true).toBe(true);
@@ -34,9 +33,9 @@ export class IsAlsatianShowSpec {
 
   @Test()
   itTru() {
-    tru(true)
+    tru(true);
   }
-  
+
   @Test()
   expectFals() {
     Expect(false).toBe(false);
@@ -44,6 +43,6 @@ export class IsAlsatianShowSpec {
 
   @Test()
   itFals() {
-    fals(false)
+    fals(false);
   }
 }

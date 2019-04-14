@@ -1,7 +1,6 @@
 {
-  "script": "dist/src/index.js",
-  "ext": "js",
+  "ext": "ts",
   "ignore": ["node_modules/**/*"],
-  "watch": "./dist/",
-  "delay": 2000
+  "watch": "./src/",
+  "delay": 1000
 }

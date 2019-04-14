@@ -1,6 +1,3 @@
-import { Expect } from 'alsatian';
-import * as _ from 'lodash';
-
 export interface IAwesomeMatchersConfig {
   matchAdaptor: IMatchAdaptor; // initially null, but must be configured
 }
@@ -32,8 +29,6 @@ export interface IMatchResult {
   expected?: any; // @todo: TExpected
 }
 
-// export type IMatchAdaptor = (matchResult: IMatchResult) => void;
-
 // Refactor to more specifics
 export interface IMatchAdaptor {
   adaptorName: string;
@@ -50,17 +45,9 @@ export interface IMatchAdaptor {
   isntLike?: (actual, expected) => void;
 }
 /*
-  //Add all those
-  
-  ok = a => Expect(a).toBeTruthy();
-  notOk = a => Expect(a).not.toBeTruthy();
-  tru = a => Expect(a).toBe(true);
-  fals = a => Expect(a).toBe(false);
-  
+  //Add those ?
   equalSet = createEqualSet();
   notEqualSet = createEqualSet(false);
-  
-  isEqual = are('isEqual');
   isntEqual = are('isEqual', 'isntEqual', false);
   isExact = are('isExact');
   isntExact = are('isExact', 'isntExact', false);
@@ -68,10 +55,5 @@ export interface IMatchAdaptor {
   isntIqual = are('isIqual', 'isntIqual', false);
   isIxact = are('isIxact');
   isntIxact = are('isIxact', 'isntIxact', false);
-  isLike = are('isLike');
-  isntLike = are('isLike', 'isntLike', false);
-  
-  iamLike = _.flip(are('isLike', 'iamLike', true, true));
   iamNotLike = _.flip(are('isLike', 'iamNotLike', false, true));
-   */
-// }
+*/
