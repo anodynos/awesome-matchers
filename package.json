@@ -1,6 +1,6 @@
 {
   "name": "awesome-matchers",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "scripts": {
     "clean": "rimraf dist",
     "build": "mkdir -p dist && tsc",
